@@ -1,5 +1,5 @@
 # Group Members:
-* Name: Marco Gabriel 
-* Email: marcog10@csu.fullerton.edu
-* Name: Luis Alvarado
-* Email: luisalvarado@csu.fullerton.edu
+* Name: Marco Gabriel , marcog10@csu.fullerton.edu
+* Name: Luis Alvarado , luisalvarado@csu.fullerton.edu
+
+

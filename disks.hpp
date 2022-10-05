@@ -11,26 +11,23 @@
 
 #pragma once
 
-
-
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <functional>
+#include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <functional>
-#include <iostream>
 
-enum disk_color { DISK_LIGHT, DISK_DARK};
+enum disk_color { DISK_LIGHT, DISK_DARK };
 
 class disk_state {
 private:
   std::vector<disk_color> _colors;
 
 public:
-  disk_state(size_t light_count)
-    : _colors(light_count * 2, DISK_LIGHT) {
+  disk_state(size_t light_count) : _colors(light_count * 2, DISK_LIGHT) {
 
     assert(light_count > 0);
 
@@ -39,25 +36,17 @@ public:
     }
   }
 
-  bool operator== (const disk_state& rhs) const {
+  bool operator==(const disk_state &rhs) const {
     return std::equal(_colors.begin(), _colors.end(), rhs._colors.begin());
   }
 
-  size_t total_count() const {
-    return _colors.size();
-  }
+  size_t total_count() const { return _colors.size(); }
 
-  size_t light_count() const {
-    return total_count() / 2;
-  }
+  size_t light_count() const { return total_count() / 2; }
 
-  size_t dark_count() const {
-    return light_count();
-  }
+  size_t dark_count() const { return light_count(); }
 
-  bool is_index(size_t i) const {
-    return (i < total_count());
-  }
+  bool is_index(size_t i) const { return (i < total_count()); }
 
   disk_color get(size_t index) const {
     assert(is_index(index));
@@ -94,26 +83,40 @@ public:
   // that the first disk at index 0 is light, the second disk at index 1
   // is dark, and so on for the entire row of disks.
   bool is_initialized() const {
-      for (size_t i = 0; i < total_count(); i++){     //check each position before function
-        if (i % 2 == 0){                              //check even position --> should be light
-            if (_colors[i] == DISK_DARK) {
-              return false;
-            }
-        } else {                                      //check odd position --> should be dark
-            if (_colors[i] == DISK_LIGHT) {
-              return false;
-            }
+    for (size_t i = 0; i < total_count();
+         i++) {         // check each position before function
+      if (i % 2 == 0) { // check even position --> should be light
+        if (_colors[i] == DISK_DARK) {
+          return false;
+        }
+      } else { // check odd position --> should be dark
+        if (_colors[i] == DISK_LIGHT) {
+          return false;
         }
       }
+    }
 
-      return true;
+    return true;
   }
 
+  // todo
   // Return true when this disk_state is fully sorted, with all light disks on
   // the left (low indices) and all dark disks on the right (high indices).
   bool is_sorted() const {
-      
-      return true;
+    // loop through the total_count()
+    for (size_t i = 0; i < total_count(); i++) {
+      if (i < total_count() / 2) {
+        if (_colors[i] == DISK_DARK) {
+
+          return false;
+        }
+      } else {
+        if (_colors[i] == DISK_LIGHT) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 };
 
@@ -126,36 +129,49 @@ private:
   unsigned _swap_count;
 
 public:
+  sorted_disks(const disk_state &after, unsigned swap_count)
+      : _after(after), _swap_count(swap_count) {}
 
-  sorted_disks(const disk_state& after, unsigned swap_count)
-    : _after(after), _swap_count(swap_count) { }
+  sorted_disks(disk_state &&after, unsigned swap_count)
+      : _after(after), _swap_count(swap_count) {}
 
-  sorted_disks(disk_state&& after, unsigned swap_count)
-    : _after(after), _swap_count(swap_count) { }
+  const disk_state &after() const { return _after; }
 
-  const disk_state& after() const {
-    return _after;
-  }
-
-  unsigned swap_count() const {
-    return _swap_count;
-  }
+  unsigned swap_count() const { return _swap_count; }
 };
 
+// the todo
 // Algorithm that sorts disks using the alternate algorithm.
-sorted_disks sort_alternate(const disk_state& before) {
-	int numOfSwap = 0;                                                                      //record # of step swap
- 
-          }
+sorted_disks sort_alternate(const disk_state &before) { // record # of step swap
+  int numOfSwap = 0;
+  disk_state step = before;
 
-  return sorted_disks(disk_state(state), numOfSwap);
+  for (size_t i = 0; i < step.light_count(); i++) {
+    for (size_t j = 0; j < step.total_count() - 1; j++) {
+      if (step.get(j) > step.get(j + 1)) {
+        step.swap(j);
+        numOfSwap++;
+      }
+    }
+  }
+
+  return sorted_disks(disk_state(step), numOfSwap);
 }
 
-
+// the todo
 // Algorithm that sorts disks using the lawnmower algorithm.
-sorted_disks sort_lawnmower(const disk_state& before) {
-  	
-	  }
+sorted_disks sort_lawnmower(const disk_state &before) {
+  int numOfSwap = 0;
+  disk_state step = before;
+  
+  for (size_t i = 0; i < step.light_count(); i++) {
+    for (size_t j = 0; j < step.total_count() - 1; j++) {
+      if (step.get(j) > step.get(j + 1)) {
+        step.swap(j);
+        numOfSwap++;
+      }
+    }
+  }
 
-  return sorted_disks(disk_state(state), numOfSwap);
+  return sorted_disks(disk_state(step), numOfSwap);
 }

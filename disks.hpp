@@ -168,6 +168,7 @@ sorted_disks sort_lawnmower(const disk_state &before) {
   int numOfSwap = 0;
   disk_state step = before;
     
+    for(int i = 0; i < step.light_count(); i++) {
     // left to right - compares every two adjacent disks and swaps if necessary
     for (size_t j = 0; j < step.total_count() - 1; j++) {
       if (step.get(j) > step.get(j + 1)) {
@@ -182,6 +183,6 @@ sorted_disks sort_lawnmower(const disk_state &before) {
           }
       }
     }
-
+  }
   return sorted_disks(disk_state(step), numOfSwap);
 }

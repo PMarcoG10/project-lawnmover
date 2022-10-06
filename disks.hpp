@@ -165,9 +165,19 @@ sorted_disks sort_lawnmower(const disk_state &before) {
   disk_state step = before;
   
   for (size_t i = 0; i < step.light_count(); i++) {
+    
+    // left to right
     for (size_t j = 0; j < step.total_count() - 1; j++) {
       if (step.get(j) > step.get(j + 1)) {
         step.swap(j);
+        numOfSwap++;
+      }
+    }
+
+    // right to left
+    for (size_t j = step.total_count() - 1; j > 0; j--) {
+      if (step.get(j) < step.get(j - 1)) {
+        step.swap(j - 1);
         numOfSwap++;
       }
     }

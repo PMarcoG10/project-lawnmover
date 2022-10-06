@@ -99,8 +99,7 @@ public:
     return true;
   }
 
-  // todo
-  // Return true when this disk_state is fully sorted, with all light disks on
+  // @Breif: Return true when this disk_state is fully sorted, with all light disks on
   // the left (low indices) and all dark disks on the right (high indices).
   bool is_sorted() const {
     // loop through the total_count()
@@ -140,10 +139,12 @@ public:
   unsigned swap_count() const { return _swap_count; }
 };
 
-// the todo
-// Algorithm that sorts disks using the alternate algorithm.
+// @Breif:starts with the leftmost disk and proceeds to the right until it reaches the rightmost disk: 
+// compares every two adjacent disks and swaps them only if necessary. 
+// It does not iterate through each index, but iterates over each pair (i.e., it moves 2 steps at a time). 
+// We consider a run to be a check of adjacent disks from left-to-right.
 sorted_disks sort_alternate(const disk_state &before) { // record # of step swap
-  int numOfSwap = 0;
+  int numOfSwap = 0;                        
   disk_state step = before;
 
   for (size_t i = 0; i < step.light_count(); i++) {
@@ -153,35 +154,34 @@ sorted_disks sort_alternate(const disk_state &before) { // record # of step swap
         numOfSwap++;
       }
     }
-  }
+ }
 
   return sorted_disks(disk_state(step), numOfSwap);
 }
 
-// the todo
-// Algorithm that sorts disks using the lawnmower algorithm.
+//@Breif: compares every two adjacent disks and swaps them only if necessary. 
+//Now we have two light disks at the left-hand end and two dark disks at the 
+//right-hand end. Once it reaches the right-hand end, it starts with the rightmost disk, 
+//compares every two adjacent disks and proceeds to the left until it reaches the leftmost disk,
+// doing the swaps only if necessary. The lawnmower movement is repeated ⌈n/2⌉ times. 
 sorted_disks sort_lawnmower(const disk_state &before) {
   int numOfSwap = 0;
   disk_state step = before;
-  
-  for (size_t i = 0; i < step.light_count(); i++) {
     
-    // left to right
+    // left to right - compares every two adjacent disks and swaps if necessary
     for (size_t j = 0; j < step.total_count() - 1; j++) {
       if (step.get(j) > step.get(j + 1)) {
         step.swap(j);
         numOfSwap++;
       }
-    }
-
-    // right to left
-    for (size_t j = step.total_count() - 1; j > 0; j--) {
-      if (step.get(j) < step.get(j - 1)) {
-        step.swap(j - 1);
-        numOfSwap++;
+      //right to left - compares every two adjacent disks and swaps if necessary
+      for (size_t k = step.total_count() - 1; k > 0; k--) {
+          if (step.get(k) < step.get(k - 1)) {
+            step.swap(k - 1);
+            numOfSwap++;
+          }
       }
     }
-  }
 
   return sorted_disks(disk_state(step), numOfSwap);
 }

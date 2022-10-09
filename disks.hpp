@@ -167,14 +167,14 @@ sorted_disks sort_lawnmower(const disk_state &before) {
   disk_state step = before;                                                       // 1 time unit 
 
     for(int i = 0; i < step.light_count(); i++) {                                   //(n+1/2) times
- // left to right - compares every two adjacent disks and swaps if necessary                                                          
+ // left to right - compares every two adjacent disks and swaps if necessary  (i%2 == 0)- meaning it is even                                                    
       for(size_t j = 0; j < step.total_count() - 1; j++) {                        // n - 1 + 1 -> n times unit 
           if (step.get(j) > step.get(j + 1)) {                                    // 2 time unit 
             step.swap(j);                                                         // 1 time unit 
             numOfSwap++;                                                          // 1 time unit 
           }
       }
-    }
+    } // else it is odd
     //right to left - compares every two adjacent disks and swaps if necessary
       for (size_t k = step.total_count() - 1; k > 0; k--) {                       // n - 1 + 1 -> n time unit 
           if (step.get(k) < step.get(k - 1)) {                                    // 2 times unit                           

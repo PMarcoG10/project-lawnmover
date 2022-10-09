@@ -144,45 +144,44 @@ public:
 // It does not iterate through each index, but iterates over each pair (i.e., it moves 2 steps at a time). 
 // We consider a run to be a check of adjacent disks from left-to-right.
 sorted_disks sort_alternate(const disk_state &before) { // record # of step swap
-  int numOfSwap = 0;                        
-  disk_state step = before;
-
-  for (size_t i = 0; i < step.light_count(); i++) {
-    for (size_t j = 0; j < step.total_count() - 1; j++) {
-      if (step.get(j) > step.get(j + 1)) {
-        step.swap(j);
-        numOfSwap++;
+                                                                                  //Step Count
+  int numOfSwap = 0;                                                              // 1 times
+  disk_state step = before;                                                       // 1 times
+                                                                             
+  for (size_t i = 0; i < step.total_count(); i++) {                               // n + 1 times
+    for (size_t j = 0; j < step.total_count() - 1; j++) {                         // (n-1+1) -> n times
+      if (step.get(j) > step.get(j + 1)) {                                        // 2 times
+        step.swap(j);                                                             // 1 times
+        numOfSwap++;                                                              // 1 times
       }
     }
  }
-
-  return sorted_disks(disk_state(step), numOfSwap);
+  return sorted_disks(disk_state(step), numOfSwap);                               // 0 times
 }
 
-//@Breif: compares every two adjacent disks and swaps them only if necessary. 
-//Now we have two light disks at the left-hand end and two dark disks at the 
-//right-hand end. Once it reaches the right-hand end, it starts with the rightmost disk, 
-//compares every two adjacent disks and proceeds to the left until it reaches the leftmost disk,
+// @Breif:compares every two adjacent disks and proceeds to the left until it reaches the leftmost disk,
 // doing the swaps only if necessary. The lawnmower movement is repeated ⌈n/2⌉ times. 
 sorted_disks sort_lawnmower(const disk_state &before) {
-  int numOfSwap = 0;
-  disk_state step = before;
-    
-    for(size_t i = 0; i < step.light_count(); i++) {
-    // left to right - compares every two adjacent disks and swaps if necessary
-    for (size_t j = 0; j < step.total_count() - 1; j++) {
-      if (step.get(j) > step.get(j + 1)) {
-        step.swap(j);
-        numOfSwap++;
-      }
-      //right to left - compares every two adjacent disks and swaps if necessary
-      for (size_t k = step.total_count() - 1; k > 0; k--) {
-          if (step.get(k) < step.get(k - 1)) {
-            step.swap(k - 1);
-            numOfSwap++;
+                                                                                  //Step Count
+  int numOfSwap = 0;                                                              // 1 time unit        
+  disk_state step = before;                                                       // 1 time unit 
+
+    for(int i = 0; i < step.light_count(); i++) {                                   //(n+1/2) times
+ // left to right - compares every two adjacent disks and swaps if necessary                                                          
+      for(size_t j = 0; j < step.total_count() - 1; j++) {                        // n - 1 + 1 -> n times unit 
+          if (step.get(j) > step.get(j + 1)) {                                    // 2 time unit 
+            step.swap(j);                                                         // 1 time unit 
+            numOfSwap++;                                                          // 1 time unit 
           }
       }
     }
-  }
-  return sorted_disks(disk_state(step), numOfSwap);
+    //right to left - compares every two adjacent disks and swaps if necessary
+      for (size_t k = step.total_count() - 1; k > 0; k--) {                       // n - 1 + 1 -> n time unit 
+          if (step.get(k) < step.get(k - 1)) {                                    // 2 times unit                           
+            step.swap(k - 1);                                                     // 2 times unit                  
+            numOfSwap++;                                                          // 1 times unit
+          }
+      }
+    
+  return sorted_disks(disk_state(step), numOfSwap);                               // 0 times
 }

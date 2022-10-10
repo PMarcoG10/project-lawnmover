@@ -145,17 +145,17 @@ public:
 // We consider a run to be a check of adjacent disks from left-to-right.
 sorted_disks sort_alternate(const disk_state &before) { // record # of step swap
                                                                                   //Step Count
-  int numOfSwap = 0;                                                              // 1 times
-  disk_state step = before;                                                       // 1 times
-                                                                             
-  for (size_t i = 0; i < step.total_count(); i++) {                               // n + 1 times
-    for (size_t j = 0; j < step.total_count() - 1; j++) {                         // (n-1+1) -> n times
-      if (step.get(j) > step.get(j + 1)) {                                        // 2 times
-        step.swap(j);                                                             // 1 times
-        numOfSwap++;                                                              // 1 times
+  int numOfSwap = 0;                                                              //1 times
+   disk_state step = before;                                                      //1 times
+                                                                          
+ for(size_t i = 0; i < step.total_count(); i++) {                                 //n-0+1 -> n + 1 times             
+    for(size_t j = i; j < step.total_count() - 1; j+=2) {                         //
+      if(step.get(j) > step.get(j+1)) {                                           //2 times
+        step.swap(j);                                                             //1 times
+        numOfSwap ++;                                                             //1 times
       }
     }
- }
+  }
   return sorted_disks(disk_state(step), numOfSwap);                               // 0 times
 }
 
